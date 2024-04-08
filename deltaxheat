@@ -1,0 +1,115 @@
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local CheatPanel = Instance.new("Frame")
+CheatPanel.Size = UDim2.new(0, 250, 0, 160)
+CheatPanel.Position = UDim2.new(-1, 0, 0, 10)  -- Начальная позиция вне экрана
+CheatPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+CheatPanel.BorderColor3 = Color3.fromRGB(80, 80, 80)
+CheatPanel.BorderSizePixel = 2
+CheatPanel.Parent = ScreenGui
+
+local CloseButton = Instance.new("TextButton")
+CloseButton.Text = "X"
+CloseButton.Size = UDim2.new(0, 20, 0, 20)
+CloseButton.Position = UDim2.new(1, -30, 0, 5)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.TextSize = 16
+CloseButton.Parent = CheatPanel
+CloseButton.ZIndex = 2
+
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Text = "Скорость⚡: 16"
+SpeedLabel.Size = UDim2.new(0, 250, 0, 20)
+SpeedLabel.Position = UDim2.new(0, 0, 0, 10)
+SpeedLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.Font = Enum.Font.GothamSemibold
+SpeedLabel.TextSize = 14
+SpeedLabel.Parent = CheatPanel
+
+local IncreaseButton = Instance.new("TextButton")
+IncreaseButton.Text = "+"
+IncreaseButton.Size = UDim2.new(0, 40, 0, 30)
+IncreaseButton.Position = UDim2.new(0, 10, 0, 40)
+IncreaseButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+IncreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+IncreaseButton.Font = Enum.Font.GothamBold
+IncreaseButton.TextSize = 16
+IncreaseButton.Parent = CheatPanel
+
+local DecreaseButton = Instance.new("TextButton")
+DecreaseButton.Text = "-"
+DecreaseButton.Size = UDim2.new(0, 40, 0, 30)
+DecreaseButton.Position = UDim2.new(0, 60, 0, 40)
+DecreaseButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+DecreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DecreaseButton.Font = Enum.Font.GothamBold
+DecreaseButton.TextSize = 16
+DecreaseButton.Parent = CheatPanel
+
+local AvatarImage = Instance.new("ImageLabel")
+AvatarImage.Size = UDim2.new(0, 60, 0, 60)
+AvatarImage.Position = UDim2.new(0, 10, 0, 90)
+AvatarImage.BackgroundTransparency = 1
+AvatarImage.Parent = CheatPanel
+
+local FooterLabel = Instance.new("TextLabel")
+FooterLabel.Text = "t.me.deltaxheat"
+FooterLabel.Size = UDim2.new(0, 250, 0, 20)
+FooterLabel.Position = UDim2.new(0, 0, 0, 140)
+FooterLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+FooterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FooterLabel.Font = Enum.Font.GothamSemibold
+FooterLabel.TextSize = 12
+FooterLabel.Parent = CheatPanel
+
+local speed = 16
+local isDragging = false
+local initialPos
+
+local function updateSpeed(newSpeed)
+    speed = newSpeed
+    player.Character.Humanoid.WalkSpeed = speed
+    SpeedLabel.Text = "Скорость⚡: " .. tostring(speed)
+end
+
+local function closeMenu()
+    CheatPanel:Destroy()
+end
+
+CloseButton.MouseButton1Click:Connect(closeMenu)
+
+IncreaseButton.MouseButton1Click:Connect(function()
+    updateSpeed(speed + 1)
+end)
+
+DecreaseButton.MouseButton1Click:Connect(function()
+    updateSpeed(speed - 1)
+end)
+
+CheatPanel.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isDragging = true
+        initialPos = CheatPanel.Position - UDim2.new(0, mouse.X, 0, mouse.Y)
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                isDragging = false
+            end
+        end)
+    end
+end)
+
+mouse.Move:Connect(function()
+    if isDragging then
+        CheatPanel.Position = UDim2.new(0, mouse.X + initialPos.X.Offset, 0, mouse.Y + initialPos.Y.Offset)
+    end
+end)
+
+updateSpeed(speed)
+
+-- Анимация появления панели читов
+CheatPanel:TweenPosition(UDim2.new(0, 10, 0, 10), "Out", "Quad", 0.5, true)
