@@ -58,7 +58,7 @@ AvatarImage.BackgroundTransparency = 1
 AvatarImage.Parent = CheatPanel
 
 local FooterLabel = Instance.new("TextLabel")
-FooterLabel.Text = "t.me.deltaxheat"
+FooterLabel.Text = "https://t.me/GojoScriptsRB"
 FooterLabel.Size = UDim2.new(0, 250, 0, 20)
 FooterLabel.Position = UDim2.new(0, 0, 0, 140)
 FooterLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
